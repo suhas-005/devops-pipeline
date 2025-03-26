@@ -1,0 +1,3 @@
+output "GITHUB_RUNNER_INSTANCE_PUBLIC_IP" {
+  value = "${module.ec2.EC2_INSTANCE_PUBLIC_IP}"
+}
