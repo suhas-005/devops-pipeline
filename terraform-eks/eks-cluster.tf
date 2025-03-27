@@ -1,16 +1,12 @@
-locals {
-    cluster_name = "devops-eks-cluster"
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = ">=20.0"
 
-  cluster_name    = local.cluster_name
+  cluster_name    = "${var.app_name}-eks-vpc"
   cluster_version = "1.32"
 
-  vpc_id                           = data.aws_vpc.vpc.id
-  subnet_ids                       = [data.aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
+  vpc_id                           = module.vpc.vpc_id
+  subnet_ids                       = module.vpc.private_subnets
   cluster_endpoint_public_access   = true
   cluster_endpoint_private_access  = true   
 
@@ -31,7 +27,7 @@ module "eks" {
   }
 
   tags = {
-    Name = local.cluster_name
+    "Name" = "${var.app_name}-eks-cluster"
   }
 
 }

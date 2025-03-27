@@ -1,45 +1,29 @@
-data "aws_vpc" "vpc" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.app_name}-vpc"]
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.19.0"
+
+  name = "${var.app_name}-eks-vpc"
+  cidr = var.eks_vpc_cidr
+
+  azs             = var.availability_zones
+  private_subnets = var.eks_private_subnet
+  public_subnets  = var.eks_public_subnet
+
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = 1
+    "Name" = "${var.app_name}-eks-public-subnet"
   }
-}
-
-data "aws_route_table" "rt" {
-  vpc_id = data.aws_vpc.vpc.id
-
-  filter {
-    name   = "tag:Name"
-    values = ["${var.app_name}-route-table"]
+  
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = 1
+    "Name" = "${var.app_name}-eks-private-subnet"
   }
-}
-
-data "aws_subnet" "public_subnet1" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.app_name}-public-subnet"]
-  }
-}
-
-data "aws_security_group" "security_group" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.app_name}-sg"]
-  }
-}
-
-resource "aws_subnet" "public_subnet2" {
-  vpc_id                  = data.aws_vpc.vpc.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.app_name}-public-subnet2"
+    "Name" = "${var.app_name}-eks-vpc"
   }
-}
-
-resource "aws_route_table_association" "rt-association" {
-  subnet_id      = aws_subnet.public_subnet2.id
-  route_table_id = data.aws_route_table.rt.id
 }
