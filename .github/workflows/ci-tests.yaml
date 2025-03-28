@@ -16,14 +16,14 @@ jobs:
       - name: Pull code
         uses: actions/checkout@v4
 
-      - name: Checkout into codebase directory
-        run: cd app-codebase && ls
-
       - name: Install dependencies
+        working-directory: app-codebase
         run: npm ci
 
       - name: Run lint
+        working-directory: app-codebase
         run: npm run lint
 
       - name: Run tests
+        working-directory: app-codebase
         run: npm run test
