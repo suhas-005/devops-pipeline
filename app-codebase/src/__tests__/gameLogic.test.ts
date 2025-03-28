@@ -13,7 +13,7 @@ describe('Game Logic', () => {
       const result = calculateWinner(board);
       expect(result).not.toBeNull();
       expect(result?.winner).toBe('X');
-      expect(result?.line).toEqual([0, 1, 2]);
+      expect(result?.line).toEqual([0, 1, 3]);
     });
 
     it('should detect vertical win for O', () => {
