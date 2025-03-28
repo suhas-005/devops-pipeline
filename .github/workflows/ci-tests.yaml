@@ -1,0 +1,29 @@
+name: Run checks/tests
+
+on:
+  pull_request:
+    types: 
+      - opened
+    branches:
+      - main
+    paths: app-codebase/**
+
+jobs:
+  test:
+    name: Unit Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull code
+        uses: actions/checkout@v4
+
+      - name: Checkout into codebase directory
+        run: cd app-codebase
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run link

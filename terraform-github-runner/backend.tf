@@ -4,6 +4,6 @@ terraform {
     key    = "github-runner/terraform.tfstate"
     region = "us-east-1"
     encrypt = true
-    use_locakfile = "tf-state-lock"
+    use_lockfile = true
   }
 }
