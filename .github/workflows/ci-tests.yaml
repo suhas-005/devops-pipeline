@@ -10,14 +10,14 @@ on:
 
 jobs:
   test:
-    name: Unit Testing
+    name: Linting and Unit Testing
     runs-on: ubuntu-latest
     steps:
       - name: Pull code
         uses: actions/checkout@v4
 
       - name: Checkout into codebase directory
-        run: cd app-codebase
+        run: cd app-codebase && ls
 
       - name: Install dependencies
         run: npm ci
@@ -26,4 +26,4 @@ jobs:
         run: npm run lint
 
       - name: Run tests
-        run: npm run link
+        run: npm run test
