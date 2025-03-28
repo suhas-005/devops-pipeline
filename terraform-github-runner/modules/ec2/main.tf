@@ -10,10 +10,10 @@ resource "aws_instance" "compute_instance" {
   vpc_security_group_ids = [var.security_group_id]
   key_name               = "client_key"
   iam_instance_profile   = "github-runner-instance-profile"
-  user_data              = templatefile("./install_script.sh", {})
+  user_data              = templatefile("./modules/ec2/install_script.sh", {})
 
   root_block_device {
-    volume_size = 30
+    volume_size = 20
   }
 
   tags = {
