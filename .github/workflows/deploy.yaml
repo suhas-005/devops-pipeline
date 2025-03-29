@@ -90,15 +90,14 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: app-codebase
-          push: false
+          push: true
           tags: ${{ steps.docker_tags.output.tags }}
           labels: ${{ steps.docker_tags.output.labels }}
-          load : true
-
+        
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ github.repository }}:${{ steps.docker_tags.output.tags }}
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.docker_tags.output.tags }}
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
@@ -107,13 +106,7 @@ jobs:
       # - name: Trivy image scan
       #   run: trivy image ${{ env.REGISTRY }}/${{ github.repository }}:sha-${{ steps.docker_tags.output.tags }} --severity CRITICAL,HIGH --format table
 
-      - name: Docker Build
-        uses: docker/build-push-action@v6
-        with:
-          context: app-codebase
-          push: true
-          tags: ${{ steps.docker_tags.output.tags }}
-          labels: ${{ steps.docker_tags.output.labels }}
+      
 
 
       
