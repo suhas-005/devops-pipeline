@@ -98,7 +98,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: {{ github.repository }}:${{ steps.docker_tags.output.tags }}
+          image-ref: ${{ github.repository }}:${{ steps.docker_tags.output.tags }}
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
