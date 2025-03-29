@@ -60,6 +60,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    needs:
+      - npm-build
     env:
       REGISTRY: ghcr.io
     steps:
