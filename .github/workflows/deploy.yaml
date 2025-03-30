@@ -96,6 +96,8 @@ jobs:
     permissions:
       contents: read
       packages: read
+    needs:
+      - docker-build
     steps:
       - name: Pull code
         uses: actions/checkout@v4
