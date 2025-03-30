@@ -69,7 +69,10 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
-      
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx@v2
+        
       - name: Docker image tags extract
         id: docker_tags
         uses: docker/metadata-action@v5
