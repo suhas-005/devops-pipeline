@@ -14,7 +14,7 @@ env:
 jobs:
   npm-build:
     name: Code Build Phase
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     permissions:
       contents: read
       packages: write
@@ -46,7 +46,7 @@ jobs:
 
   docker-build:
     name: Docker Build and Push
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     permissions:
       contents: read
       packages: write
@@ -92,7 +92,7 @@ jobs:
 
   deploy: 
     name: Deploy Application
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     permissions:
       contents: read
       packages: read
