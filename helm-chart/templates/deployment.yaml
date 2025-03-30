@@ -22,7 +22,7 @@ spec:
       {{- end }}
     spec:
       containers:
-        name: {{ include "chart.fullname" . }}
+      - name: {{ include "chart.fullname" . }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}
         imagePullPolicy: {{ .Values.image.PullPolicy }}
         ports:
