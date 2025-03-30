@@ -71,7 +71,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Setup Docker Buildx
-        uses: docker/setup-buildx@v2
+        uses: docker/setup-buildx@v3
         
       - name: Docker image tags extract
         id: docker_tags
