@@ -1,10 +1,15 @@
 name: Build and Deploy
 
-on:
-  push:
-    branches:
-      - main
-    paths: app-codebase/**
+on: workflow_dipatch
+  # push:
+  #   branches:
+  #     - main
+  #   paths: 
+  #     - app-codebase/**
+  #     - helm-chart/**
+
+env:
+  REGISTRY: ghcr.io
 
 jobs:
   npm-build:
@@ -16,18 +21,6 @@ jobs:
     steps: 
       - name: Pull code
         uses: actions/checkout@v4
-      
-      # - name: Get npm cache directory
-      #   id: npm-cache-dir
-      #   shell: bash
-      #   run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
-
-      # - name: Check cache hit
-      #   uses: actions/cache@v4
-      #   id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
-      #   with:
-      #     path: ${{ steps.npm-cache-dir.outputs.dir }}
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
         working-directory: app-codebase
@@ -37,13 +30,13 @@ jobs:
         working-directory: app-codebase
         run: npm run build
 
-      # - name: SonarQube Scan
-      #   uses: SonarSource/sonarqube-scan-action@v5.1.0
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      #   with:
-      #     projectBaseDir: app-codebase
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          projectBaseDir: app-codebase
     
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -59,8 +52,8 @@ jobs:
       packages: write
     needs:
       - npm-build
-    env:
-      REGISTRY: ghcr.io
+    outputs:
+      image_tag: sha-${{ github.sha }}
     steps:
       - name: Pull code
         uses: actions/checkout@v4
@@ -93,20 +86,28 @@ jobs:
           push: true
           tags: ${{ steps.docker_tags.outputs.tags }}
           labels: ${{ steps.docker_tags.outputs.labels }}
-        
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:sha-${{ github.sha }}
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
       
-      # - name: Trivy image scan
-      #   run: trivy image ${{ env.REGISTRY }}/${{ github.repository }}:sha-${{ steps.docker_tags.output.tags }} --severity CRITICAL,HIGH --format table
+      - name: Trivy image scan
+        run: trivy image ${{ env.REGISTRY }}/${{ github.repository }}:sha-${{ github.sha }} --severity CRITICAL,HIGH --format table
 
-      
+  deploy: 
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Pull code
+        uses: actions/checkout@v4
 
+      - name: Pull Docker Image
+        run: docker pull ${{ env.REGISTRY }}/${{ github.repository }}:${{ needs.docker-build.outputs.image_tag }}
 
+      - name: Update kubeconfig
+        run: aws eks --region us-east-1 update-kubeconfig --name devops-eks-cluster
+
+      - name: Deploy application using helm
+        run: helm upgrade --install tic-tac-toe helm-chart/ --create-namespace devops-project --set image.tag=${{ needs.docker-build.outputs.image_tag }} -f helm-chart/values.yaml
       
         
       

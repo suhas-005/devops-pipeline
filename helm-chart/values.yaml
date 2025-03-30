@@ -1,0 +1,53 @@
+
+replicaCount: 3
+
+namespace: devops-project
+
+podLabels:
+  app: tic-tac-toe
+
+nameOverride: tic-tac-toe
+fullnameOverride: tic-tac-toe
+
+image:
+  repository: ghcr.io/suhas-005/devops-pipeline
+  tag: latest
+  pullPolicy: Always
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 300m
+    memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 80
+  periodSeconds: 10
+  initialDelaySeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+  protocol: TCP
+
+ingress:
+  enabled: true
+  annotations: 
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  hostname: tic-tac-toe.example.com
+  servicePort: 80
+  path: /
+  pathType: Prefix

@@ -6,11 +6,9 @@ sudo apt install openjdk-17-jre -y
 sudo apt install openjdk-17-jdk -y
 java --version
 
-# Install Node.js 16 and npm
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/nodesource-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_16.x focal main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-sudo apt update
-sudo apt install -y nodejs
+# Install Node 20
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - 
+sudo apt-get install -y nodejs
 
 
 # Installing Docker 
@@ -42,6 +40,14 @@ sudo curl -LO "https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl"
 sudo chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 kubectl version --client
+
+# Installing Kubectl
+#!/bin/bash
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
 
 # Installing Terraform
 #!/bin/bash
