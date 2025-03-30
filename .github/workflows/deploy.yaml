@@ -119,7 +119,7 @@ jobs:
         run: aws eks --region us-east-1 update-kubeconfig --name devops-eks-cluster
 
       - name: Deploy application using helm
-        run: helm upgrade --install tic-tac-toe helm-chart/ --create-namespace devops-project --set image.tag=${{ needs.docker-build.outputs.image_tag }} -f helm-chart/values.yaml
+        run: helm upgrade --install tic-tac-toe helm-chart/ --create-namespace -n devops-project --set image.tag=${{ needs.docker-build.outputs.image_tag }} -f helm-chart/values.yaml
       
         
       
