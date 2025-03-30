@@ -120,6 +120,9 @@ jobs:
 
       - name: Deploy application using helm
         run: helm upgrade --install tic-tac-toe helm-chart/ --create-namespace -n devops-project --set image.tag=${{ needs.docker-build.outputs.image_tag }} -f helm-chart/values.yaml
+
+      - name: Get Application URL
+        run: kubectl get ingress/tic-tac-toe-ingress -n devops-project
       
         
       
