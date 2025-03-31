@@ -37,17 +37,7 @@ readinessProbe:
   periodSeconds: 5
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
   targetPort: 80
   protocol: TCP
-
-ingress:
-  enabled: true
-  annotations: 
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-  hostname: tic-tac-toe.example.com
-  servicePort: 80
-  path: /
-  pathType: Prefix
