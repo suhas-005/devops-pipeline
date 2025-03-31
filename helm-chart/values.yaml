@@ -10,7 +10,7 @@ nameOverride: tic-tac-toe
 fullnameOverride: tic-tac-toe
 
 image:
-  repository: ghcr.io/suhas-005/devops-pipeline
+  repository: docker.io/suhas005/tic-tac-toe
   tag: latest
   pullPolicy: Always
 
@@ -37,6 +37,10 @@ readinessProbe:
   periodSeconds: 5
 
 service:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
   type: LoadBalancer
   port: 80
   targetPort: 80
