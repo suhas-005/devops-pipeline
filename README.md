@@ -73,9 +73,7 @@
      
      ![Sonar Project 1](https://github.com/user-attachments/assets/dff1cd4f-d686-4634-90c8-59dcc11fcb60)
      
-   - Then provide a **Project display name**, **Project key** and **Main branch name**
-     
-     ![Sonar Project 2](https://github.com/user-attachments/assets/4b9b5d2e-5549-451c-a25c-6820dc813379)
+   - Then provide a **Project display name** (Ex: devops-tic-tac-toe), **Project key**(Ex: devops-tic-tac-toe) and **Main branch name**(Ex: main)
      
    - Then on the next page click on **With GitHub Actions**
      
@@ -109,11 +107,20 @@
 <br>
 
 8. **Access the application**
-   - Once both the workflow have run successfully, we can access the application. Login to your AWS account and go to Load Balancers section. There a load balancer will be create use that URL/DNS name to access the Tic-Tac-Toe app.
+   - Once both the workflow have run successfully, we can access the application. Login to your AWS account and go to Load Balancers section There a load balancer will be created (this may take few minutes), use that URL/DNS name to access the Tic-Tac-Toe app.
+     ![App](https://github.com/user-attachments/assets/42987916-a2f4-461b-ab6e-5a1431613bfa)
 
 
+### **Clean up**
+```
+helm uninstall tic-tac-toe -n devops-project
+cd terraform-eks
+terraform destroy
+cd terraform-github-runner
+terraform destroy
+```
+Destroy the S3 bucket created on for strong remote state.
 
-
-
-
-   
+### Future Improvements
+- CI/CD to deploy EKS
+- Restrict EC2 IAM Role access
