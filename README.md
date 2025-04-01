@@ -53,7 +53,7 @@
      ```
 <br>
 
-3. **Setup EKS Cluster**
+3. **Setup EKS Cluster**<br>
    Login to GitHub Runner EC2 instance again and run terraform-eks from there
    ```
    git clone https://github.com/suhas-005/devops-pipeline.git
@@ -65,9 +65,9 @@
    This will take around 15-20 minutes to finish
 <br>
 
-4. **Setup SonarQube**
-   SonarQube URL: ```<public-ip-of-ec2>:9000```
-   Initial username and password - ```admin```
+4. **Setup SonarQube**<br>
+   SonarQube URL: ```<public-ip-of-ec2>:9000```<br>
+   Initial username and password - ```admin```<br>
    - Reset the password
    - Then on the home page, click on ```Manually``` to create a project manually
      
@@ -89,14 +89,14 @@
    - Then click on Finish tutorial
 <br>
 
-5. **Setup GitHub Action Secrets and Variables**
+6. **Setup GitHub Action Secrets and Variables**
    - Go to your GitHub repository and click on **Settings** tab > **Secrets and variables** > **Actions** > **Create repository secret**
    - Create secrets for **SONAR_TOKEN**, **SONAR_HOST_URL**, **DOCKERHUB_USERNAME**  and **DOCKERHUB_TOKEN**.
    - Under Variables create variable for **IMAGE_NAME**
    - Now add a file with name **sonar-project.properties** under app-codebase directory containing the project-key obtained in the previous step while setting up SonarQube
 <br>
 
-6. **Trigger GitHub Actions**
+7. **Trigger GitHub Actions**
    1. Trigger **Run checks/tests** workflow (app-ci-tests.yaml):
       - This action gets triggred when a PR is created and changes exist under app-codebase/ directory.
         ![PR](https://github.com/user-attachments/assets/213dc2fa-8eb9-464b-8adc-be43f0e8f635)
@@ -108,7 +108,7 @@
          ![Workflow 2](https://github.com/user-attachments/assets/74257a5c-f211-4f18-a94b-b03509008cd4)
 <br>
 
-7. **Access the application**
+8. **Access the application**
    - Once both the workflow have run successfully, we can access the application. Login to your AWS account and go to Load Balancers section. There a load balancer will be create use that URL/DNS name to access the Tic-Tac-Toe app.
 
 
