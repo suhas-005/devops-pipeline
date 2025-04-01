@@ -1,10 +1,7 @@
 #!/bin/bash
 # For Ubuntu 24.04
-# Intsalling Java
 sudo apt update -y
-sudo apt install openjdk-17-jre -y
-sudo apt install openjdk-17-jdk -y
-java --version
+
 
 # Install Node 20
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - 
